@@ -151,4 +151,6 @@ def test_get_features_cat_classification_excluye_feature_irrelevante():
     assert 'aleatoria' not in resultado
 
 
-def test_get_features_cat_classification_retorna_no
+def test_get_features_cat_classification_retorna_none_input_invalido():
+    """Caso de error: input no es DataFrame → retorna None."""
+    assert get_features_cat_classification("no soy df", target_col='x') is None
