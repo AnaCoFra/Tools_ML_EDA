@@ -1,8 +1,13 @@
 import pandas as pd
+import numpy as np
 from scipy.stats import mannwhitneyu, f_oneway
 from pandas.api.types import is_numeric_dtype
+import matplotlib
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 import seaborn as sns
+import math
 
 
 def get_features_cat_regression(
@@ -107,9 +112,12 @@ def plot_features_cat_regression(
 
     # Filtrar solo columnas significativas
     columns = [
-        col for col in columns
-        if col in columnas_significativas
-    ]
+    col for col in columns
+    if col in columnas_significativas
+]
+
+    if len(columns) == 0:
+        return []
 
     if with_individual_plot:
 
@@ -147,10 +155,7 @@ def plot_features_cat_regression(
             figsize=(12, 5 * n_rows)
         )
 
-        if len(columns) == 1:
-            axes = [axes]
-        else:
-            axes = axes.flatten()
+        axes = np.array(axes).flatten()
 
         for i, columna in enumerate(columns):
 
