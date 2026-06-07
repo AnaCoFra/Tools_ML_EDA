@@ -2,8 +2,12 @@ import pandas as pd
 import pytest
 from toolbox_ml.eda.cat_regression import get_features_cat_regression, plot_features_cat_regression
 import math
+import matplotlib
+matplotlib.use("Agg")
 
-def test_get_features_cat_regression_ok():
+import matplotlib.pyplot as plt
+
+def test_get_features_cat_regression_correcto():
     df = pd.DataFrame({
         "color": ["rojo"] * 4 + ["azul"] * 4,
         "ventas": [100, 101, 102, 103, 1, 2, 3, 4]})
@@ -15,7 +19,7 @@ def test_get_features_cat_regression_ok():
     assert "color" in resultado
     
 
-def test_get_features_cat_regression_sin_significativas():
+def test_get_features_cat_regression_limite():
     df = pd.DataFrame({
         "color": ["rojo", "azul", "verde", "amarillo"],
         "ventas": [10, 11, 10, 11]})
@@ -25,7 +29,7 @@ def test_get_features_cat_regression_sin_significativas():
     assert resultado == []
     
 
-def test_get_features_cat_regression_target_inexistente():
+def test_get_features_cat_regression_error():
     df = pd.DataFrame({
         "color": ["rojo", "azul"]})
     resultado = get_features_cat_regression(
@@ -34,7 +38,7 @@ def test_get_features_cat_regression_target_inexistente():
     assert resultado is None
     
 
-def test_plot_features_cat_regression_ok():
+def test_plot_features_cat_regression_correcto():
     df = pd.DataFrame({
         "color": ["rojo"] * 4 + ["azul"] * 4,
         "ventas": [100, 101, 102, 103, 1, 2, 3, 4]})
@@ -45,7 +49,7 @@ def test_plot_features_cat_regression_ok():
     assert "color" in resultado
     
 
-def test_plot_features_cat_regression_sin_significativas():
+def test_plot_features_cat_regression_limite():
     df = pd.DataFrame({
         "color": ["rojo", "azul", "verde", "amarillo"],
         "ventas": [10, 11, 10, 11]})
@@ -55,7 +59,7 @@ def test_plot_features_cat_regression_sin_significativas():
     assert resultado == []
     
 
-def test_plot_features_cat_regression_target_inexistente():
+def test_plot_features_cat_regression_error():
     df = pd.DataFrame({
         "color": ["rojo", "azul"]})
     resultado = plot_features_cat_regression(

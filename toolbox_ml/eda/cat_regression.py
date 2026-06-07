@@ -13,8 +13,9 @@ import math
 def get_features_cat_regression(
     df: pd.DataFrame,
     target_col: str,
-    pvalue: float = 0.05, 
-    umbral_card_rel: float = 0.3
+    pvalue: float = 0.05,
+    umbral_card_rel: float = 0.3,
+    umbral_n_cat: int = 20
 ) -> list:
 
     # Comprobaciones de entrada
@@ -33,9 +34,14 @@ def get_features_cat_regression(
     if not isinstance(pvalue, (int, float)) or not (0 < pvalue < 1):
         print("Error: pvalue debe ser un número entre 0 y 1")
         return None
-    
-    if (not isinstance(umbral_card_rel, float) or not (0 < umbral_card_rel < 1)):
-        print("Error: umbral_cardinalidad_relativa debe ser un número entre 0 y 1")
+
+    if (
+        not isinstance(umbral_card_rel, float)
+        or not (0 < umbral_card_rel < 1)
+    ):
+        print(
+            "Error: umbral_card_rel debe ser un número entre 0 y 1"
+        )
         return None
 
     columnas_significativas = []
@@ -51,31 +57,48 @@ def get_features_cat_regression(
 
         n_categorias = temp_df[col].nunique()
 
-        cardinalidad_relativa = n_categorias / len(temp_df)
+        cardinalidad_relativa = (
+            n_categorias / len(temp_df)
+        )
 
         # Consideramos categórica si:
-        # - tiene menos de 20 categorías
-        # - y además su cardinalidad relativa es menor a 0.3
-        if cardinalidad_relativa < umbral_card_rel:
+        # - tiene baja cardinalidad relativa
+        # - y además pocas categorías absolutas
+        es_categorica = (
+            cardinalidad_relativa < umbral_card_rel
+            and n_categorias <= umbral_n_cat
+        )
+
+        if es_categorica:
 
             categorias = temp_df[col].unique()
 
-            # EXACTAMENTE 2 categorías -> Mann-Whitney U
+            # EXACTAMENTE 2 categorías
             if len(categorias) == 2:
 
-                grupo1 = temp_df[temp_df[col] == categorias[0]][target_col]
-                grupo2 = temp_df[temp_df[col] == categorias[1]][target_col]
+                grupo1 = temp_df[
+                    temp_df[col] == categorias[0]
+                ][target_col]
 
-                _, p_valor = mannwhitneyu(grupo1, grupo2)
+                grupo2 = temp_df[
+                    temp_df[col] == categorias[1]
+                ][target_col]
+
+                _, p_valor = mannwhitneyu(
+                    grupo1,
+                    grupo2
+                )
 
                 if p_valor < pvalue:
                     columnas_significativas.append(col)
 
-            # MÁS DE 2 categorías -> ANOVA
+            # MÁS DE 2 categorías
             elif len(categorias) > 2:
 
                 grupos = [
-                    temp_df[temp_df[col] == categoria][target_col]
+                    temp_df[
+                        temp_df[col] == categoria
+                    ][target_col]
                     for categoria in categorias
                 ]
 
@@ -93,28 +116,28 @@ def plot_features_cat_regression(
     columns: list = None,
     pvalue: float = 0.05,
     with_individual_plot: bool = False,
-    umbral_card_rel: float = 0.3
+    umbral_card_rel: float = 0.3,
+    umbral_n_cat: int = 15
 ) -> list:
 
     columnas_significativas = get_features_cat_regression(
         df,
         target_col,
         pvalue,
-        umbral_card_rel
+        umbral_card_rel,
+        umbral_n_cat
     )
 
     if columnas_significativas is None:
         return None
 
-    # Si no se pasan columnas, usar las significativas
     if columns is None:
         columns = columnas_significativas
 
-    # Filtrar solo columnas significativas
     columns = [
-    col for col in columns
-    if col in columnas_significativas
-]
+        col for col in columns
+        if col in columnas_significativas
+    ]
 
     if len(columns) == 0:
         return []
@@ -125,7 +148,12 @@ def plot_features_cat_regression(
 
             plt.figure(figsize=(8, 5))
 
-            categorias = df[columna].dropna().unique()
+            categorias = (
+                df[columna]
+                .value_counts()
+                .head(10)
+                .index
+            )
 
             for categoria in categorias:
 
@@ -134,7 +162,7 @@ def plot_features_cat_regression(
                 plt.hist(
                     datos,
                     alpha=0.5,
-                    bins=15,
+                    bins=len(df[target_col].unique()),
                     label=str(categoria)
                 )
 
@@ -142,6 +170,7 @@ def plot_features_cat_regression(
             plt.xlabel(target_col)
             plt.ylabel("Frecuencia")
             plt.legend()
+            plt.tight_layout()
             plt.show()
 
     else:
@@ -155,11 +184,19 @@ def plot_features_cat_regression(
             figsize=(12, 5 * n_rows)
         )
 
-        axes = np.array(axes).flatten()
+        if not isinstance(axes, np.ndarray):
+            axes = np.array([axes])
+
+        axes = axes.flatten()
 
         for i, columna in enumerate(columns):
 
-            categorias = df[columna].dropna().unique()
+            categorias = (
+                df[columna]
+                .value_counts()
+                .head(10)
+                .index
+            )
 
             for categoria in categorias:
 
@@ -168,7 +205,7 @@ def plot_features_cat_regression(
                 axes[i].hist(
                     datos,
                     alpha=0.5,
-                    bins=15,
+                    bins=len(df[target_col].unique()),
                     label=str(categoria)
                 )
 
@@ -176,6 +213,9 @@ def plot_features_cat_regression(
             axes[i].set_xlabel(target_col)
             axes[i].set_ylabel("Frecuencia")
             axes[i].legend()
+
+        for j in range(i + 1, len(axes)):
+            fig.delaxes(axes[j])
 
         plt.tight_layout()
         plt.show()
