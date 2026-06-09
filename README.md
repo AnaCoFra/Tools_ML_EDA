@@ -24,14 +24,12 @@ Todo el proyecto está organizado como un paquete instalable, con funciones docu
 
 notebooks/
 └── demo.ipynb
-
-data/
-└── titanic_cat_reg.csv
+└── data/
+    └── titanic_cat_reg.csv
 
 tests/
 ├── __init__.py
 └── test_core.py
-
 
 toolbox_ml/
 └── eda/
