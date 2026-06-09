@@ -1,19 +1,19 @@
-# toolbox_ml
+# Tools_ML_EDA
 
-`toolbox_ml` es un paquete de Python para análisis exploratorio de datos y tareas básicas de regresión con un enfoque práctico, modular y reutilizable. El objetivo del proyecto es construir una herramienta de trabajo real para Data Science, con funciones bien documentadas, tests automáticos y una estructura de paquete instalable.
+`Tools_ML_EDA` es el paquete de Python que hemos desarrollado para el Team Challenge de EDA y Machine Learning. El proyecto reúne funciones útiles para explorar datos, tipificar variables, analizar relaciones con un target de regresión y generar visualizaciones de apoyo al análisis.
 
-## Descripción
+## Qué incluye
 
-Este paquete reúne funciones para:
+El paquete permite:
 
-- resumir rápidamente un DataFrame;
-- sugerir el tipo de cada variable;
-- seleccionar variables numéricas relacionadas con un target de regresión;
-- visualizar relaciones entre variables numéricas y el target;
-- seleccionar variables categóricas significativas en regresión;
-- visualizar distribuciones del target por grupos categóricos.
+- obtener un resumen de un DataFrame;
+- tipificar variables según su cardinalidad;
+- seleccionar variables numéricas relacionadas con un target;
+- representar gráficamente relaciones numéricas con el target;
+- seleccionar variables categóricas significativas;
+- representar distribuciones del target por grupos categóricos.
 
-El proyecto se ha desarrollado siguiendo una estructura de paquete profesional, con pruebas unitarias en `pytest`, documentación en docstrings y control de versiones con Git y GitHub.
+Todo el proyecto está organizado como un paquete instalable, con funciones documentadas, validación de entradas y tests automáticos con `pytest`.
 
 ## Estructura del repositorio
 
@@ -63,16 +63,16 @@ setup.py
 - matplotlib
 - seaborn
 - pytest
-- scikit-learn, solo si se implementa la función bonus
+- scikit-learn, solo para la función bonus
 
-Todas las dependencias están recogidas en `requirements.txt`.
+Todas las dependencias están en `requirements.txt`.
 
 ## Instalación
 
 Clona el repositorio e instala el proyecto en un entorno virtual:
 
 ```bash
-git clone https://github.com/User/Tools_ML_EDA.git
+git clone https://github.com/user/Tools_ML_EDA.git
 cd Tools_ML_EDA
 python -m venv venv
 source venv/bin/activate   # Mac/Linux
@@ -88,9 +88,10 @@ venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .
 ```
+
 ## Uso
 
-Una vez instalado el paquete, las funciones pueden importarse así:
+Una vez instalado el paquete, las funciones se importan así:
 
 ```python
 from toolbox_ml.eda.core import (
@@ -103,7 +104,7 @@ from toolbox_ml.eda.core import (
 )
 ```
 
-### 1. `describe_df`
+### `describe_df`
 
 ```python
 import seaborn as sns
@@ -114,9 +115,9 @@ resumen = describe_df(df)
 print(resumen)
 ```
 
-Esta función devuelve un DataFrame con información básica de cada columna: tipo, porcentaje de nulos, número de valores únicos y cardinalidad.
+Devuelve un resumen por columna con tipo de dato, porcentaje de nulos, número de valores únicos y cardinalidad.
 
-### 2. `tipifica_variables`
+### `tipifica_variables`
 
 ```python
 from toolbox_ml.eda.core import tipifica_variables
@@ -125,9 +126,7 @@ tipos = tipifica_variables(df, umbral_categoria=10, umbral_continua=70.0)
 print(tipos)
 ```
 
-La función propone un tipo sugerido para cada variable según su cardinalidad y porcentaje de cardinalidad.
-
-### 3. `get_features_num_regression`
+### `get_features_num_regression`
 
 ```python
 from toolbox_ml.eda.core import get_features_num_regression
@@ -141,9 +140,9 @@ numericas = get_features_num_regression(
 print(numericas)
 ```
 
-Devuelve las variables numéricas con correlación de Pearson relevante frente al target.
+Devuelve las variables numéricas con correlación relevante con el target.
 
-### 4. `plot_features_num_regression`
+### `plot_features_num_regression`
 
 ```python
 from toolbox_ml.eda.core import plot_features_num_regression
@@ -158,9 +157,9 @@ seleccionadas = plot_features_num_regression(
 print(seleccionadas)
 ```
 
-Genera gráficos de relación entre el target y las variables numéricas seleccionadas.
+Genera gráficos de las variables numéricas seleccionadas junto al target.
 
-### 5. `get_features_cat_regression`
+### `get_features_cat_regression`
 
 ```python
 from toolbox_ml.eda.core import get_features_cat_regression
@@ -175,7 +174,7 @@ print(categoricas)
 
 Selecciona variables categóricas con relación estadísticamente significativa con el target.
 
-### 6. `plot_features_cat_regression`
+### `plot_features_cat_regression`
 
 ```python
 from toolbox_ml.eda.core import plot_features_cat_regression
@@ -192,28 +191,23 @@ print(representadas)
 
 Muestra histogramas agrupados del target por categorías.
 
-## Ejecución de tests
+## Tests
 
-Para ejecutar todos los tests unitarios:
+Para ejecutar los tests:
 
 ```bash
 pytest tests/ -v
 ```
 
-Los tests cubren casos correctos, casos límite y casos de error para todas las funciones implementadas.
+Los tests cubren casos válidos, casos límite y casos de error para las funciones del paquete.
 
-## Notebook de demostración
+## Demo
 
-El archivo `notebooks/demo.ipynb` contiene una demostración completa del uso del paquete con un dataset real, mostrando:
+El notebook `notebooks/demo.ipynb` muestra el uso del paquete con un dataset real y sirve como demostración del proyecto.
 
-- carga de datos;
-- uso de cada función;
-- salidas visibles;
-- comentarios explicativos.
+## Equipo
 
-## Equipo y reparto de tareas
-
-Este proyecto ha sido desarrollado por:
+El proyecto ha sido realizado por:
 
 - Ana Corrochano
 - Maria Rodriguez
@@ -221,28 +215,11 @@ Este proyecto ha sido desarrollado por:
 - Paula Comas
 - William Walker
 
-## Flujo de trabajo Git
+## Flujo de trabajo
 
-El repositorio sigue un flujo basado en ramas de feature y Pull Requests:
+Hemos trabajado con ramas de feature y Pull Requests hacia `main`, usando commits con formato Conventional Commits.
 
-1. Crear una rama por funcionalidad.
-2. Trabajar en la rama con commits pequeños y claros.
-3. Abrir Pull Request hacia `main`.
-4. Revisar el código antes de hacer merge.
-5. Hacer squash and merge.
-6. Sincronizar `main` después de cada integración.
-
-Ejemplos de ramas:
-
-```bash
-feature/describe-df
-feature/tipifica-variables
-feature/num-regression
-feature/cat-regression
-feature/bonus
-```
-
-Se recomienda usar commits con formato Conventional Commits
+Ejemplos:
 
 ```bash
 feat: add describe_df function
@@ -250,16 +227,3 @@ fix: handle empty dataframe in tipifica_variables
 docs: update README examples
 test: add unit tests for num regression
 ```
-
-## Notas de implementación
-
-Todas las funciones incluyen:
-
-- validación de entradas;
-- type hints;
-- docstrings con descripción, argumentos y retornos;
-- comentarios en el cuerpo de la función para explicar la lógica principal.
-
-## Licencia
-
-Proyecto académico desarrollado para el Team Challenge de Machine Learning.
