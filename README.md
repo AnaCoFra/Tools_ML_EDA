@@ -210,10 +210,11 @@ El notebook `notebooks/demo.ipynb` muestra el uso del paquete con un dataset rea
 El proyecto ha sido realizado por:
 
 - Ana Corrochano
-- Maria Rodriguez
-- Melania Fondevilla
 - Paula Comas
+- Melania Fondevilla
+- Maria Rodriguez
 - William Walker
+
 
 ## Flujo de trabajo
 
