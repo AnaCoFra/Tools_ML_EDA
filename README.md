@@ -23,30 +23,18 @@ Todo el proyecto está organizado como un paquete instalable, con funciones docu
     └── tests.yml
 
 notebooks/
-├── demo.ipynb
-├── demo_cat_regression.ipynb
-├── demo_describe_tipifica.ipynb
-└── demo_num_regression.ipynb
-
-data/
-└── titanic_cat_reg.csv
+└── demo.ipynb
+└── data/
+    └── titanic_cat_reg.csv
 
 tests/
 ├── __init__.py
-├── test_bonus.py
-├── test_cat_regression.py
-├── test_core.py
-├── test_describe_tipifica.py
-└── test_num_regression.py
+└── test_core.py
 
 toolbox_ml/
 └── eda/
     ├── __init__.py
-    ├── cat_regression.py
-    ├── core.py
-    ├── core_bonus.py
-    ├── core_describe_tipifica.py
-    └── num_regression.py
+    └──core.py
 
 .gitignore
 README.md
