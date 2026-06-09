@@ -198,11 +198,10 @@ El notebook `notebooks/demo.ipynb` muestra el uso del paquete con un dataset rea
 El proyecto ha sido realizado por:
 
 - Ana Corrochano
-- Paula Comas
-- Melania Fondevilla
 - Maria Rodriguez
+- Melania Fondevilla
+- Paula Comas
 - William Walker
-
 
 ## Flujo de trabajo
 
