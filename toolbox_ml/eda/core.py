@@ -70,9 +70,9 @@ def tipifica_variables(df: pd.DataFrame,
             tipo = "Binaria"
         elif num_unique <= umbral_categorica:
             tipo = "Categorica"
-        elif num_unique > umbral_categorica and perc_card <= umbral_continua:
+        elif num_unique > umbral_categorica and perc_card >= umbral_continua:
             tipo = "Numérica Continua"
-        elif num_unique > umbral_categorica and perc_card > umbral_continua:
+        elif num_unique > umbral_categorica and perc_card < umbral_continua:
             tipo = "Numérica Discreta"
         else:
             tipo = "Desconocida"

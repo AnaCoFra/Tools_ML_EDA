@@ -90,8 +90,8 @@ def test_tipifica_variables_clasificacion_correcta():
 
     assert tipos == {
         'Nombre': 'Categorica',
-        'Edad': 'Numérica Discreta',
-        'Estatura': 'Numérica Discreta',
+        'Edad': 'Numérica Continua',
+        'Estatura': 'Numérica Continua',
         'Sexo': 'Binaria'
     }
     
