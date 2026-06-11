@@ -70,9 +70,9 @@ def tipifica_variables(df: pd.DataFrame,
             tipo = "Binaria"
         elif num_unique <= umbral_categorica:
             tipo = "Categorica"
-        elif num_unique > umbral_categorica and perc_card <= umbral_continua:
+        elif num_unique > umbral_categorica and perc_card >= umbral_continua:
             tipo = "Numérica Continua"
-        elif num_unique > umbral_categorica and perc_card > umbral_continua:
+        elif num_unique > umbral_categorica and perc_card < umbral_continua:
             tipo = "Numérica Discreta"
         else:
             tipo = "Desconocida"
@@ -259,8 +259,24 @@ def get_features_cat_regression(
     umbral_card_rel: float = 0.3,
     umbral_n_cat: int = 20
 ) -> list:
+    
+    """
+    Obtiene las variables categóricas de un DataFrame que presentan una
+    relación estadísticamente significativa con una variable target numérica.
 
-    # Comprobaciones de entrada
+    La función:
+        - identifica variables categóricas usando:
+            - cardinalidad relativa (`umbral_card_rel`)
+            - número máximo de categorías (`umbral_n_cat`)
+        - aplica:
+            - Mann-Whitney U si la variable tiene exactamente 2 categorías
+            - ANOVA si tiene más de 2 categorías
+
+    Returns
+    Lista de variables categóricas con relación significativa respecto a la 
+    variable target según el p-value indicado.
+    """
+
     if not isinstance(df, pd.DataFrame):
         print("Error: df debe ser un pd.DataFrame")
         return None
@@ -288,10 +304,8 @@ def get_features_cat_regression(
 
     columnas_significativas = []
 
-    # Recorrer columnas
     for col in df.columns:
 
-        # Saltar target
         if col == target_col:
             continue
 
@@ -304,8 +318,8 @@ def get_features_cat_regression(
         )
 
         # Consideramos categórica si:
-        # - tiene baja cardinalidad relativa
-        # - y además pocas categorías absolutas
+        # - su cardinalidad relativa es inferior al umbral
+        # - y su número de categorías no supera el umbral indicado
         es_categorica = (
             cardinalidad_relativa < umbral_card_rel
             and n_categorias <= umbral_n_cat
@@ -315,7 +329,6 @@ def get_features_cat_regression(
 
             categorias = temp_df[col].unique()
 
-            # EXACTAMENTE 2 categorías
             if len(categorias) == 2:
 
                 grupo1 = temp_df[
@@ -334,7 +347,6 @@ def get_features_cat_regression(
                 if p_valor < pvalue:
                     columnas_significativas.append(col)
 
-            # MÁS DE 2 categorías
             elif len(categorias) > 2:
 
                 grupos = [
@@ -362,6 +374,22 @@ def plot_features_cat_regression(
     umbral_card_rel: float = 0.3,
     umbral_n_cat: int = 15
 ) -> list:
+    
+    """
+    Genera histogramas agrupados para analizar la relación entre una
+    variable target numérica y variables categóricas significativas.
+
+    La función:
+        - obtiene las variables categóricas significativas usando `get_features_cat_regression`
+        - representa histogramas agrupados del target para cada categoría de cada variable
+        - permite visualizar:
+            - todos los gráficos en una única figura con subplots
+            - o un gráfico independiente por variable
+
+    Returns
+    Lista de variables categóricas representadas mediante gráficos y con relación 
+    significativa respecto a la variable target.
+    """
 
     columnas_significativas = get_features_cat_regression(
         df,

@@ -90,8 +90,8 @@ def test_tipifica_variables_clasificacion_correcta():
 
     assert tipos == {
         'Nombre': 'Categorica',
-        'Edad': 'Numérica Discreta',
-        'Estatura': 'Numérica Discreta',
+        'Edad': 'Numérica Continua',
+        'Estatura': 'Numérica Continua',
         'Sexo': 'Binaria'
     }
     
@@ -190,6 +190,7 @@ def test_plot_features_num_regression_error():
 ###test_cat_regression
 
 def test_get_features_cat_regression_correcto():
+    """Caso correcto: input válido → devuelve lista con variables significativas."""
     df = pd.DataFrame({
         "color": ["rojo"] * 4 + ["azul"] * 4,
         "ventas": [100, 101, 102, 103, 1, 2, 3, 4]})
@@ -202,6 +203,7 @@ def test_get_features_cat_regression_correcto():
     
 
 def test_get_features_cat_regression_limite():
+    """Caso límite: input válido → devuelve lista vacía al no encnotrar variables significativas."""
     df = pd.DataFrame({
         "color": ["rojo", "azul", "verde", "amarillo"],
         "ventas": [10, 11, 10, 11]})
@@ -212,6 +214,7 @@ def test_get_features_cat_regression_limite():
     
 
 def test_get_features_cat_regression_error():
+    """Caso erróneo: input no válido → retorna None."""
     df = pd.DataFrame({
         "color": ["rojo", "azul"]})
     resultado = get_features_cat_regression(
@@ -221,6 +224,7 @@ def test_get_features_cat_regression_error():
     
 
 def test_plot_features_cat_regression_correcto():
+    """Caso correcto: input válido → pinta los gráficos y devuelve lista con variables significativas."""
     df = pd.DataFrame({
         "color": ["rojo"] * 4 + ["azul"] * 4,
         "ventas": [100, 101, 102, 103, 1, 2, 3, 4]})
@@ -232,6 +236,7 @@ def test_plot_features_cat_regression_correcto():
     
 
 def test_plot_features_cat_regression_limite():
+    """Caso límite: input válido → no pinta gráficos y devuelve lista vacía al no encontrar variables significativas."""
     df = pd.DataFrame({
         "color": ["rojo", "azul", "verde", "amarillo"],
         "ventas": [10, 11, 10, 11]})
@@ -242,6 +247,7 @@ def test_plot_features_cat_regression_limite():
     
 
 def test_plot_features_cat_regression_error():
+    """Caso erróneo: input no válido → retorna None."""
     df = pd.DataFrame({
         "color": ["rojo", "azul"]})
     resultado = plot_features_cat_regression(
